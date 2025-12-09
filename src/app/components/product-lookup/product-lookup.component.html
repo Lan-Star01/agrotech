@@ -1,0 +1,257 @@
+<div class="product-lookup">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" (click)="navigateHome()" style="cursor: pointer;">
+        <span class="fs-4 fw-bold text-success">🌱 AgroTrace</span>
+      </a>
+      <button class="btn btn-outline-success" (click)="navigateHome()">
+        <i class="bi bi-house"></i> მთავარი
+      </button>
+    </div>
+  </nav>
+
+  <!-- Search Section - Only show when no product is selected -->
+  @if (!product) {
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold mb-3">დაასკანირე QR კოდი</h1>
+            <p class="lead text-muted">
+              გაიგე პროდუქტის სრული ისტორია - თესლიდან მაღაზიამდე
+            </p>
+          </div>
+
+          <div class="card shadow-lg border-0 mb-4">
+            <div class="card-body p-5">
+              <div class="text-center mb-4">
+                <div class="scanner-placeholder">
+                  <i class="bi bi-qr-code-scan display-1 text-success mb-3"></i>
+                  @if (loading) {
+                    <div class="spinner-border text-success" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="text-muted mt-3">ძებნა...</p>
+                  } @else if (showCamera) {
+                    <div class="camera-container mb-3">
+                      <video #videoElement autoplay playsinline class="camera-preview"></video>
+                      <canvas #canvasElement style="display: none;"></canvas>
+                      <div class="camera-overlay">
+                        <div class="scan-frame"></div>
+                        <p class="text-white mt-3">მიმართეთ კამერა QR კოდისკენ</p>
+                      </div>
+                    </div>
+                    <button class="btn btn-outline-danger btn-sm" (click)="showCamera = false">
+                      <i class="bi bi-x-circle"></i> კამერის დახურვა
+                    </button>
+                  } @else {
+                    <button class="btn btn-success btn-lg mb-3 ms-3" (click)="showCamera = true">
+                      <i class="bi bi-camera"></i> კამერით სკანირება
+                    </button>
+                    <p class="text-muted">
+                      გამოიყენეთ კამერა ან შეიყვანეთ პროდუქტის კოდი ხელით
+                    </p>
+                  }
+                </div>
+              </div>
+
+              <div class="divider my-4">
+                <span class="divider-text">ან</span>
+              </div>
+
+              <!-- Manual Input -->
+              <div class="manual-input">
+                <h5 class="text-center mb-3">შეიყვანეთ პროდუქტის კოდი</h5>
+                <div class="input-group input-group-lg mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="productId"
+                    (keyup.enter)="searchProduct()"
+                    placeholder="მაგ: DEMO001"
+                    [disabled]="loading">
+                  <button
+                    class="btn btn-success"
+                    type="button"
+                    (click)="searchProduct()"
+                    [disabled]="loading || !productId.trim()">
+                    <i class="bi bi-search"></i> ძებნა
+                  </button>
+                </div>
+
+                @if (notFound) {
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    პროდუქტი ვერ მოიძებნა. გთხოვთ შეამოწმოთ კოდი და სცადოთ თავიდან.
+                    <button type="button" class="btn-close" (click)="notFound = false"></button>
+                  </div>
+                }
+
+                <div class="demo-codes mt-4">
+                  <p class="text-muted small mb-2 text-center">სატესტო კოდები:</p>
+                  <div class="d-flex gap-2 justify-content-center flex-wrap">
+                    <button class="btn btn-sm btn-outline-success" (click)="productId = 'DEMO001'; searchProduct()">
+                      DEMO001
+                    </button>
+                    <button class="btn btn-sm btn-outline-success" (click)="productId = 'DEMO002'; searchProduct()">
+                      DEMO002
+                    </button>
+                    <button class="btn btn-sm btn-outline-success" (click)="productId = 'DEMO003'; searchProduct()">
+                      DEMO003
+                    </button>
+                    <button class="btn btn-sm btn-outline-success" (click)="productId = 'DEMO004'; searchProduct()">
+                      DEMO004
+                    </button>
+                  </div>
+                </div>
+
+                <div class="text-center mt-4">
+                  <p class="text-muted mb-2">არ იცით პროდუქტის ID?</p>
+                  <button class="btn btn-outline-success" (click)="viewAllProducts()">
+                    <i class="bi bi-list"></i> ნახეთ ყველა პროდუქტი
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Info Cards -->
+          <div class="row mt-5">
+            <div class="col-md-4 mb-3">
+              <div class="info-card text-center p-4">
+                <i class="bi bi-shield-check text-success fs-1 mb-3"></i>
+                <h5>ვერიფიცირებული</h5>
+                <p class="text-muted small">ბლოკჩეინით დაცული ინფორმაცია</p>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="info-card text-center p-4">
+                <i class="bi bi-geo-alt text-success fs-1 mb-3"></i>
+                <h5>განვლილი გზა</h5>
+                <p class="text-muted small">სრული მოგზაურობის ისტორია</p>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="info-card text-center p-4">
+                <i class="bi bi-award text-success fs-1 mb-3"></i>
+                <h5>სერტიფიცირებული</h5>
+                <p class="text-muted small">ორგანული და ბიო პროდუქტები</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Product Details Section -->
+  @if (product) {
+    <div class="container py-5">
+      <div class="product-details">
+        <div class="row mb-4">
+          <div class="col">
+            <button class="btn btn-outline-secondary" (click)="reset()">
+              <i class="bi bi-arrow-left"></i> უკან
+            </button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="card shadow-lg mb-4">
+              <div class="card-header bg-success text-white">
+                <h3 class="mb-0">{{ product.name }}</h3>
+              </div>
+              <div class="card-body">
+                @if (product.imageUrl) {
+                  <img [src]="product.imageUrl" [alt]="product.name" class="product-image mb-4">
+                }
+
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <h5><i class="bi bi-building"></i> ფერმის ინფორმაცია</h5>
+                    <p><strong>ფერმა:</strong> {{ product.farmName }}</p>
+                    <p><strong>ფერმერი:</strong> {{ product.farmerName }}</p>
+                    <p><strong>ადგილმდებარეობა:</strong> {{ product.location }}</p>
+                    <p><strong>ელ. ფოსტა:</strong> {{ product.farmerEmail }}</p>
+                    <p><strong>ტელეფონი:</strong> {{ product.farmerPhone }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <h5><i class="bi bi-info-circle"></i> პროდუქტის დეტალები</h5>
+                    <p><strong>კატეგორია:</strong> <span class="badge bg-success">{{ product.category }}</span></p>
+                    <p><strong>დარგვის თარიღი:</strong> {{ formatDate(product.plantingDate) }}</p>
+                    <p><strong>მოსავლის თარიღი:</strong> {{ formatDate(product.harvestDate) }}</p>
+                    @if (product.seedOrigin) {
+                      <p><strong>თესლის წარმოშობა:</strong> {{ product.seedOrigin }}</p>
+                    }
+                    @if (product.transportMethod) {
+                      <p><strong>ტრანსპორტი:</strong> {{ product.transportMethod }}</p>
+                    }
+                  </div>
+                </div>
+
+                @if (product.description) {
+                  <div class="mb-3">
+                    <h5><i class="bi bi-card-text"></i> აღწერა</h5>
+                    <p class="text-muted">{{ product.description }}</p>
+                  </div>
+                }
+
+                @if (product.certifications.length > 0) {
+                  <div class="mb-3">
+                    <h5><i class="bi bi-award"></i> სერტიფიკატები</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                      @for (cert of product.certifications; track cert) {
+                        <span class="badge bg-success fs-6">
+                          <i class="bi bi-patch-check"></i> {{ cert }}
+                        </span>
+                      }
+                    </div>
+                  </div>
+                }
+
+                <div class="scan-info text-muted small mt-4">
+                  <i class="bi bi-eye"></i> ეს პროდუქტი დასკანერებულია {{ product.scanCount }} ჯერ
+                </div>
+              </div>
+            </div>
+
+            <!-- Journey Timeline -->
+            @if (product.journey) {
+              <app-journey-timeline [journey]="product.journey"></app-journey-timeline>
+            }
+          </div>
+
+          <!-- QR Code Sidebar -->
+          <div class="col-lg-4">
+            <div class="card shadow-lg sticky-top" style="top: 20px;">
+              <div class="card-body text-center">
+                <h5 class="card-title">პროდუქტის QR კოდი</h5>
+                @if (product.qrCode) {
+                  <img [src]="product.qrCode" alt="QR Code" class="img-fluid mb-3" style="max-width: 250px;">
+                } @else {
+                  <div class="qr-placeholder mb-3">
+                    <i class="bi bi-qr-code display-1 text-muted"></i>
+                  </div>
+                }
+                <p class="text-muted small">
+                  პროდუქტის კოდი: <br>
+                  <code class="fs-6">{{ product.id }}</code>
+                </p>
+                <div class="verification-badge mt-3">
+                  <div class="alert alert-success">
+                    <i class="bi bi-shield-check fs-3"></i>
+                    <p class="mb-0 mt-2"><strong>ვერიფიცირებული პროდუქტი</strong></p>
+                    <small>დამოწმებულია AgroTrace სისტემაში</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

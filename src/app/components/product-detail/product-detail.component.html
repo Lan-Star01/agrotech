@@ -1,0 +1,274 @@
+<div class="product-detail-page">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" (click)="navigateHome()" style="cursor: pointer;">
+        <span class="fs-4 fw-bold text-success">🌱 AgroTrace</span>
+      </a>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-success" (click)="scanAnother()">
+          <i class="bi bi-qr-code-scan"></i> სკანირება
+        </button>
+        <button class="btn btn-outline-success" (click)="navigateHome()">
+          <i class="bi bi-house"></i> მთავარი
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="container py-5 text-center">
+      <div class="spinner-border text-success" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-3 text-muted">პროდუქტის ჩატვირთვა...</p>
+    </div>
+  }
+
+  <!-- Not Found State -->
+  @if (notFound && !loading) {
+    <div class="container py-5">
+      <div class="text-center">
+        <i class="bi bi-exclamation-triangle text-warning display-1"></i>
+        <h2 class="mt-4">პროდუქტი ვერ მოიძებნა</h2>
+        <p class="text-muted">ეს პროდუქტი არ არსებობს სისტემაში</p>
+        <div class="mt-4">
+          <button class="btn btn-success me-2" (click)="scanAnother()">
+            <i class="bi bi-qr-code-scan"></i> სხვა პროდუქტის სკანირება
+          </button>
+          <button class="btn btn-outline-success" (click)="navigateHome()">
+            <i class="bi bi-house"></i> მთავარი გვერდი
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Product Details -->
+  @if (product && !loading) {
+    <div class="container py-5">
+      <!-- Product Header with Image -->
+      @if (product.imageUrl) {
+        <div class="card shadow-lg border-0 mb-4">
+          <div class="row g-0">
+            <div class="col-md-5">
+              <img [src]="product.imageUrl" class="img-fluid rounded-start product-image" [alt]="product.name"
+                   onerror="this.style.display='none'">
+            </div>
+            <div class="col-md-7">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                  <h1 class="display-5 fw-bold mb-0 me-3">{{ product.name }}</h1>
+                  <span class="badge bg-success fs-6">{{ product.category }}</span>
+                </div>
+                <p class="lead text-muted mb-3">{{ product.description }}</p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="mb-2 d-flex gap-1">
+                      <i class="bi bi-geo-alt text-success"></i>
+                      <strong>ფერმა:</strong> {{ product.farmName }}
+                    </p>
+                    <p class="mb-2 d-flex gap-1">
+                      <i class="bi bi-pin-map text-success"></i>
+                      <strong>ლოკაცია:</strong> {{ product.location }}
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <p class="mb-2 d-flex gap-1">
+                      <i class="bi bi-person text-success"></i>
+                      <strong>ფერმერი:</strong> {{ product.farmerName }}
+                    </p>
+                    <p class="mb-2 d-flex gap-1">
+                      <i class="bi bi-envelope text-success"></i>
+                      <strong>ელ. ფოსტა:</strong> {{ product.farmerEmail }}
+                    </p>
+                  </div>
+                </div>
+                <div class="verified-badge-inline mt-3">
+                  <i class="bi bi-patch-check-fill text-success fs-3"></i>
+                  <span class="text-success fw-bold">ვერიფიცირებული</span>
+                  <span class="text-muted small ms-2">(ბლოკჩეინით დაცული)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="card shadow-lg border-0 mb-4">
+          <div class="card-body p-4">
+            <div class="row align-items-center">
+              <div class="col-md-8">
+                <div class="d-flex align-items-center mb-3">
+                  <h1 class="display-5 fw-bold mb-0 me-3">{{ product.name }}</h1>
+                  <span class="badge bg-success fs-6">{{ product.category }}</span>
+                </div>
+                <p class="lead text-muted mb-3">{{ product.description }}</p>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="mb-2">
+                      <i class="bi bi-geo-alt text-success"></i>
+                      <strong>ფერმა:</strong> {{ product.farmName }}
+                    </p>
+                    <p class="mb-2">
+                      <i class="bi bi-pin-map text-success"></i>
+                      <strong>ლოკაცია:</strong> {{ product.location }}
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <p class="mb-2">
+                      <i class="bi bi-person text-success"></i>
+                      <strong>ფერმერი:</strong> {{ product.farmerName }}
+                    </p>
+                    <p class="mb-2">
+                      <i class="bi bi-envelope text-success"></i>
+                      <strong>ელ. ფოსტა:</strong> {{ product.farmerEmail }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 text-center">
+                <div class="verified-badge">
+                  <i class="bi bi-patch-check-fill text-success display-1"></i>
+                  <h5 class="mt-2 text-success">ვერიფიცირებული</h5>
+                  <p class="text-muted small">ბლოკჩეინით დაცული</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Journey Timeline -->
+      <div class="card shadow-lg border-0 mb-4">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0">
+            <i class="bi bi-map"></i> პროდუქტის მოგზაურობა
+          </h4>
+        </div>
+        <div class="card-body p-4">
+          <div class="timeline">
+            @for (step of journey; track step.step; let i = $index; let isLast = $last) {
+              <div class="timeline-item">
+                <div class="timeline-marker">
+                  <div class="timeline-icon">
+                    <i class="bi {{ getIconClass(step.icon) }} text-white"></i>
+                  </div>
+                  @if (!isLast) {
+                    <div class="timeline-line"></div>
+                  }
+                </div>
+                <div class="timeline-content">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                          <h5 class="card-title text-success mb-1">{{ step.step }}</h5>
+                          <p class="text-muted small mb-2">
+                            <i class="bi bi-calendar"></i> {{ step.date }}
+                          </p>
+                          <p class="mb-0">{{ step.description }}</p>
+                        </div>
+                        <span class="badge bg-light text-success">{{ i + 1 }}</span>
+                      </div>
+                      <p class="text-muted small mb-0 mt-2">
+                        <i class="bi bi-geo-alt"></i> {{ step.location }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Certifications -->
+      @if (product.certifications.length > 0) {
+        <div class="card shadow-lg border-0 mb-4">
+          <div class="card-header bg-success text-white">
+            <h4 class="mb-0">
+              <i class="bi bi-award"></i> სერტიფიკატები
+            </h4>
+          </div>
+          <div class="card-body p-4">
+            <div class="row">
+              @for (cert of product.certifications; track cert) {
+                <div class="col-md-6 mb-3">
+                  <div class="cert-badge">
+                    <i class="bi bi-patch-check text-success me-2"></i>
+                    <span class="fw-bold">{{ cert }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Additional Info -->
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="card shadow border-0 h-100">
+            <div class="card-body">
+              <h5 class="card-title text-success">
+                <i class="bi bi-calendar-event"></i> მნიშვნელოვანი თარიღები
+              </h5>
+              <hr>
+              <p><strong>დარგვის თარიღი:</strong> {{ product.plantingDate }}</p>
+              <p><strong>მოსავლის თარიღი:</strong> {{ product.harvestDate }}</p>
+              @if (product.seedOrigin) {
+                <p><strong>თესლის წარმოშობა:</strong> {{ product.seedOrigin }}</p>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="card shadow border-0 h-100">
+            <div class="card-body">
+              <h5 class="card-title text-success">
+                <i class="bi bi-truck"></i> ტრანსპორტი და დისტრიბუცია
+              </h5>
+              <hr>
+              @if (product.transportMethod) {
+                <p><strong>ტრანსპორტის მეთოდი:</strong> {{ product.transportMethod }}</p>
+              }
+              @if (product.storeLocation) {
+                <p><strong>მაღაზია:</strong> {{ product.storeLocation }}</p>
+              }
+              <p class="text-muted small mt-3">
+                <i class="bi bi-eye"></i> ეს პროდუქტი დაასკანირეს {{ product.scanCount }} ჯერ
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Farmer -->
+      <div class="card shadow-lg border-0 bg-light">
+        <div class="card-body p-4 text-center">
+          <h5 class="mb-3">კითხვები პროდუქტის შესახებ?</h5>
+          <p class="text-muted mb-3">დაუკავშირდით ფერმერს</p>
+          <a href="mailto:{{ product.farmerEmail }}" class="btn btn-success me-2">
+            <i class="bi bi-envelope"></i> ელ. ფოსტა
+          </a>
+          @if (product.farmerPhone) {
+            <a href="tel:{{ product.farmerPhone }}" class="btn btn-outline-success">
+              <i class="bi bi-telephone"></i> დარეკვა
+            </a>
+          }
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="text-center mt-4 d-flex justify-content-center gap-3">
+        <button class="btn btn-success btn-lg me-2" (click)="scanAnother()">
+          <i class="bi bi-qr-code-scan"></i> სხვა პროდუქტის სკანირება
+        </button>
+        <button class="btn btn-outline-success btn-lg" (click)="navigateHome()">
+          <i class="bi bi-house"></i> მთავარი გვერდი
+        </button>
+      </div>
+    </div>
+  }
+</div>

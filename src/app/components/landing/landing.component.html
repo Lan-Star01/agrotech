@@ -1,0 +1,148 @@
+<div class="landing-page">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <span class="fs-4 fw-bold text-success">🌱 AgroTrace</span>
+      </a>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-success" (click)="navigateToProducts()">
+          <i class="bi bi-grid-3x3-gap"></i> პროდუქტები
+        </button>
+        <button class="btn btn-success" (click)="navigateToLogin()">
+          <i class="bi bi-box-arrow-in-right"></i> ფერმერებისთის
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section py-5">
+    <div class="container py-5">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1 class="display-3 fw-bold mb-4">ნახე საიდან მოდის შენი საკვები</h1>
+          <p class="lead mb-4">
+            ბლოკჩეინზე დაფუძნებული ციფრული სერტიფიკაციის სისტემა,
+            რომელიც უზრუნველყოფს პროდუქტის სრულ განვლილ გზის ჩვენებას -
+            თესლიდან მაღაზიის თაროებამდე.
+          </p>
+          <div class="d-flex gap-3 flex-wrap">
+            <button class="btn btn-success btn-lg" (click)="navigateToProducts()">
+              <i class="bi bi-grid-3x3-gap"></i> ნახე პროდუქტები
+            </button>
+            <button class="btn btn-outline-success btn-lg" (click)="navigateToLookup()">
+              <i class="bi bi-qr-code-scan"></i> დაასკანირე QR კოდი
+            </button>
+          </div>
+          <div class="mt-3">
+            <small class="text-muted">
+              ფერმერი ხარ?
+              <a href="#" (click)="navigateToLogin(); $event.preventDefault()" class="text-success fw-bold">შესვლა</a>
+              ან
+              <a href="#" (click)="navigateToRegister(); $event.preventDefault()" class="text-success fw-bold">რეგისტრაცია</a>
+            </small>
+          </div>
+        </div>
+        <div class="col-lg-6 text-center">
+          <img src="assets/hero-image.svg" alt="AgroTrace" class="img-fluid" style="max-width: 500px;"
+               onerror="this.style.display='none'">
+          <div class="hero-icon-placeholder">
+            <i class="bi bi-shield-check text-success" style="font-size: 200px;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem/Solution Section -->
+  <section class="problem-solution py-5 bg-light">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="card h-100 border-danger">
+            <div class="card-body">
+              <h3 class="card-title text-danger mb-3">
+                <i class="bi bi-exclamation-triangle-fill"></i> პრობლემა
+              </h3>
+              <ul class="list-unstyled">
+                <li class="mb-2"><i class="bi bi-x-circle text-danger"></i> ნდობის ნაკლებობა ორგანული პროდუქტების მიმართ</li>
+                <li class="mb-2"><i class="bi bi-x-circle text-danger"></i> ყალბი სერტიფიკატები</li>
+                <li class="mb-2"><i class="bi bi-x-circle text-danger"></i> პროდუქტის წარმოშობის გაუმჭვირვალობა</li>
+                <li class="mb-2"><i class="bi bi-x-circle text-danger"></i> საკვები უსაფრთხოების რისკები</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="card h-100 border-success">
+            <div class="card-body">
+              <h3 class="card-title text-success mb-3">
+                <i class="bi bi-check-circle-fill"></i> გადაწყვეტა
+              </h3>
+              <ul class="list-unstyled">
+                <li class="mb-2"><i class="bi bi-check-circle text-success"></i> ბლოკჩეინზე დაფუძნებული სერტიფიკაცია</li>
+                <li class="mb-2"><i class="bi bi-check-circle text-success"></i> უცვლელი და გამჭვირვალე ჩანაწერები</li>
+                <li class="mb-2"><i class="bi bi-check-circle text-success"></i> სრული ინფორმაცია პროდუქტის მოგზაურობის შესახებ</li>
+                <li class="mb-2"><i class="bi bi-check-circle text-success"></i> მყისიერი ვერიფიკაცია QR კოდით</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works py-5">
+    <div class="container py-5">
+      <h2 class="text-center mb-5 display-5 fw-bold">როგორ მუშაობს?</h2>
+      <div class="row">
+        <div class="col-md-4 text-center mb-4">
+          <div class="step-circle mx-auto mb-3">
+            <i class="bi bi-person-plus-fill fs-1 text-success"></i>
+          </div>
+          <h4 class="mb-3">1. რეგისტრაცია</h4>
+          <p>ფერმერი ამატებს პროდუქტის დეტალებს სისტემაში</p>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+          <div class="step-circle mx-auto mb-3">
+            <i class="bi bi-qr-code fs-1 text-success"></i>
+          </div>
+          <h4 class="mb-3">2. QR გენერაცია</h4>
+          <p>სისტემა ქმნის უნიკალურ QR კოდს პროდუქტისთვის</p>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+          <div class="step-circle mx-auto mb-3">
+            <i class="bi bi-phone-fill fs-1 text-success"></i>
+          </div>
+          <h4 class="mb-3">3. სკანირება</h4>
+          <p>მომხმარებელი სკანირებს QR კოდს და ხედავს სრულ ისტორიას</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section py-5 bg-success text-white">
+    <div class="container py-5 text-center">
+      <h2 class="display-5 fw-bold mb-4">მზად ხარ დასაწყებად?</h2>
+      <p class="lead mb-4">შეუერთდი ციფრული სოფლის მეურნეობის რევოლუციას</p>
+      <div class="d-flex justify-content-center gap-3">
+        <button class="btn btn-light btn-lg" (click)="navigateToRegister()">
+          დაიწყე როგორც ფერმერმა
+        </button>
+        <button class="btn btn-outline-light btn-lg" (click)="navigateToLookup()">
+          დაასკანირე პროდუქტი
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-4 bg-dark text-white text-center">
+    <div class="container">
+      <p class="mb-0">&copy; 2025 AgroTrace. ყველა უფლება დაცულია.</p>
+    </div>
+  </footer>
+</div>

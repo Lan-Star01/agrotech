@@ -1,0 +1,179 @@
+<div class="register-page">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" (click)="goToHome()" style="cursor: pointer;">
+        <span class="fs-4 fw-bold text-success">🌱 AgroTrace</span>
+      </a>
+      <button class="btn btn-outline-success" (click)="goToHome()">
+        <i class="bi bi-house"></i> მთავარი
+      </button>
+    </div>
+  </nav>
+
+  <!-- Registration Form -->
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100 p-4">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-0">
+          <div class="card-body p-5">
+            <div class="text-center mb-4">
+              <i class="bi bi-person-plus-fill text-success display-1"></i>
+              <h2 class="mt-3 fw-bold">ფერმერის რეგისტრაცია</h2>
+              <p class="text-muted">შექმენით ანგარიში და დაიწყეთ პროდუქტების დამატება</p>
+            </div>
+
+            @if (errorMessage) {
+              <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> {{ errorMessage }}
+              </div>
+            }
+
+            <form (ngSubmit)="onRegister()">
+              <!-- Personal Info -->
+              <div class="mb-3">
+                <label for="name" class="form-label fw-bold">
+                  <i class="bi bi-person"></i> სახელი და გვარი *
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  [(ngModel)]="name"
+                  name="name"
+                  placeholder="მაგ: გიორგი მელაძე"
+                  required
+                  [disabled]="isLoading">
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label fw-bold">
+                  <i class="bi bi-envelope"></i> ელ. ფოსტა *
+                </label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  [(ngModel)]="email"
+                  name="email"
+                  placeholder="your@email.com"
+                  required
+                  [disabled]="isLoading">
+              </div>
+
+              <div class="mb-3">
+                <label for="phone" class="form-label fw-bold">
+                  <i class="bi bi-telephone"></i> ტელეფონი *
+                </label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="phone"
+                  [(ngModel)]="phone"
+                  name="phone"
+                  placeholder="+995 555 123 456"
+                  required
+                  [disabled]="isLoading">
+              </div>
+
+              <!-- Farm Info -->
+              <hr class="my-4">
+              <h6 class="text-success mb-3">
+                <i class="bi bi-geo-alt"></i> ფერმის ინფორმაცია
+              </h6>
+
+              <div class="mb-3">
+                <label for="farmName" class="form-label fw-bold">
+                  <i class="bi bi-house-door"></i> ფერმის სახელი *
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="farmName"
+                  [(ngModel)]="farmName"
+                  name="farmName"
+                  placeholder="მაგ: მწვანე ველი"
+                  required
+                  [disabled]="isLoading">
+              </div>
+
+              <div class="mb-3">
+                <label for="location" class="form-label fw-bold">
+                  <i class="bi bi-pin-map"></i> ადგილმდებარეობა *
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="location"
+                  [(ngModel)]="location"
+                  name="location"
+                  placeholder="მაგ: თბილისი, საბურთალო"
+                  required
+                  [disabled]="isLoading">
+              </div>
+
+              <!-- Password -->
+              <hr class="my-4">
+              <h6 class="text-success mb-3">
+                <i class="bi bi-lock"></i> უსაფრთხოება
+              </h6>
+
+              <div class="mb-3">
+                <label for="password" class="form-label fw-bold">
+                  <i class="bi bi-shield-lock"></i> პაროლი *
+                </label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  [(ngModel)]="password"
+                  name="password"
+                  placeholder="მინიმუმ 6 სიმბოლო"
+                  required
+                  [disabled]="isLoading">
+                <div class="form-text">პაროლი უნდა შეიცავდეს მინიმუმ 6 სიმბოლოს</div>
+              </div>
+
+              <div class="mb-4">
+                <label for="confirmPassword" class="form-label fw-bold">
+                  <i class="bi bi-shield-check"></i> პაროლის დადასტურება *
+                </label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="confirmPassword"
+                  [(ngModel)]="confirmPassword"
+                  name="confirmPassword"
+                  placeholder="გაიმეორეთ პაროლი"
+                  required
+                  [disabled]="isLoading">
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-success btn-lg w-100 mb-3"
+                [disabled]="isLoading">
+                @if (isLoading) {
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  რეგისტრაცია...
+                } @else {
+                  <i class="bi bi-person-plus"></i> რეგისტრაცია
+                }
+              </button>
+            </form>
+
+            <hr class="my-4">
+
+            <div class="text-center">
+              <p class="mb-0">უკვე გაქვთ ანგარიში?
+                <a (click)="goToLogin()" class="text-success fw-bold" style="cursor: pointer;">
+                  შესვლა
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

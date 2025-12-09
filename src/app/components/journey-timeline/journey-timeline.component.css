@@ -1,0 +1,152 @@
+.journey-timeline {
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2d5016;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.timeline-container {
+  position: relative;
+  padding: 20px 0;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 60px;
+  margin-bottom: 30px;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #4CAF50 0%, #2d5016 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+  z-index: 2;
+}
+
+.timeline-marker .material-icons {
+  color: white;
+  font-size: 24px;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 23px;
+  top: 48px;
+  width: 2px;
+  height: calc(100% + 30px);
+  background: linear-gradient(180deg, #4CAF50 0%, #81C784 100%);
+  z-index: 1;
+}
+
+.timeline-content {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 3px solid #4CAF50;
+}
+
+.stage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.stage-header h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d5016;
+  margin: 0;
+}
+
+.stage-date {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.stage-details {
+  margin-top: 10px;
+}
+
+.stage-location {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #555;
+  font-size: 0.9rem;
+  margin: 5px 0;
+}
+
+.stage-location .material-icons {
+  font-size: 18px;
+  color: #4CAF50;
+}
+
+.stage-notes {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 10px 0 0 0;
+  padding-top: 10px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.no-journey {
+  padding: 40px 20px;
+  text-align: center;
+  background: #f5f5f5;
+  border-radius: 8px;
+  color: #999;
+}
+
+.no-journey p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .timeline-item {
+    padding-left: 50px;
+  }
+
+  .timeline-marker {
+    width: 40px;
+    height: 40px;
+  }
+
+  .timeline-marker .material-icons {
+    font-size: 20px;
+  }
+
+  .timeline-line {
+    left: 19px;
+    top: 40px;
+  }
+
+  .stage-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}

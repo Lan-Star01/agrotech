@@ -1,0 +1,108 @@
+<div class="login-page">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" (click)="goToHome()" style="cursor: pointer;">
+        <span class="fs-4 fw-bold text-success">🌱 AgroTrace</span>
+      </a>
+      <button class="btn btn-outline-success" (click)="goToHome()">
+        <i class="bi bi-house"></i> მთავარი
+      </button>
+    </div>
+  </nav>
+
+  <!-- Login Form -->
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100 p-4">
+      <div class="col-md-5">
+        <div class="card shadow-lg border-0">
+          <div class="card-body p-5">
+            <div class="text-center mb-4">
+              <i class="bi bi-person-circle text-success display-1"></i>
+              <h2 class="mt-3 fw-bold">ფერმერის ავტორიზაცია</h2>
+              <p class="text-muted">შედით თქვენს ანგარიშში პროდუქტების დასამატებლად</p>
+            </div>
+
+            @if (errorMessage) {
+              <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle"></i> {{ errorMessage }}
+              </div>
+            }
+
+            <form (ngSubmit)="onLogin()">
+              <div class="mb-3">
+                <label for="email" class="form-label fw-bold">
+                  <i class="bi bi-envelope"></i> ელ. ფოსტა
+                </label>
+                <input
+                  type="email"
+                  class="form-control form-control-lg"
+                  id="email"
+                  [(ngModel)]="email"
+                  name="email"
+                  placeholder="your@email.com"
+                  required
+                  [disabled]="isLoading">
+              </div>
+
+              <div class="mb-4">
+                <label for="password" class="form-label fw-bold">
+                  <i class="bi bi-lock"></i> პაროლი
+                </label>
+                <input
+                  type="password"
+                  class="form-control form-control-lg"
+                  id="password"
+                  [(ngModel)]="password"
+                  name="password"
+                  placeholder="••••••••"
+                  required
+                  [disabled]="isLoading">
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-success btn-lg w-100 mb-3"
+                [disabled]="isLoading">
+                @if (isLoading) {
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  შესვლა...
+                } @else {
+                  <i class="bi bi-box-arrow-in-right"></i> შესვლა
+                }
+              </button>
+            </form>
+
+            <hr class="my-4">
+
+            <div class="text-center mb-3">
+              <p class="mb-0">არ გაქვთ ანგარიში?
+                <a href="#" (click)="goToRegister(); $event.preventDefault()" class="text-success fw-bold">
+                  რეგისტრაცია
+                </a>
+              </p>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="bg-light p-3 rounded">
+              <p class="small mb-2 fw-bold text-success">
+                <i class="bi bi-info-circle"></i> დემო ანგარიშები:
+              </p>
+              <p class="small mb-1"><strong>ფერმერი 1:</strong></p>
+              <p class="small text-muted mb-2">
+                ელ. ფოსტა: giorgi&#64;greenfarm.ge<br>
+                პაროლი: demo123
+              </p>
+              <p class="small mb-1"><strong>ფერმერი 2:</strong></p>
+              <p class="small text-muted mb-0">
+                ელ. ფოსტა: nino&#64;ecofarm.ge<br>
+                პაროლი: demo123
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

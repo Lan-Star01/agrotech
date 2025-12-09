@@ -1,0 +1,40 @@
+<div class="journey-timeline" *ngIf="journey && getActiveStages().length > 0">
+  <h3 class="timeline-title">პროდუქტის მოგზაურობა</h3>
+
+  <div class="timeline-container">
+    <div
+      *ngFor="let stage of getActiveStages(); let i = index; let isLast = last"
+      class="timeline-item"
+      [class.completed]="getStageData(stage.key)"
+    >
+      <div class="timeline-marker">
+        <!-- <span class="material-icons">{{ stage.icon }}</span> -->
+      </div>
+
+      <div class="timeline-content">
+        <div class="stage-header">
+          <h4>{{ stage.label }}</h4>
+          <span class="stage-date" *ngIf="getStageData(stage.key)?.date">
+            {{ formatDate(getStageData(stage.key)!.date) }}
+          </span>
+        </div>
+
+        <div class="stage-details" *ngIf="getStageData(stage.key)">
+          <p *ngIf="getStageData(stage.key)?.location" class="stage-location">
+            <span class="material-icons">location_on</span>
+            {{ getStageData(stage.key)!.location }}
+          </p>
+          <p *ngIf="getStageData(stage.key)?.notes" class="stage-notes">
+            {{ getStageData(stage.key)!.notes }}
+          </p>
+        </div>
+      </div>
+
+      <div class="timeline-line" *ngIf="!isLast"></div>
+    </div>
+  </div>
+</div>
+
+<div class="no-journey" *ngIf="!journey || getActiveStages().length === 0">
+  <p>პროდუქტის მოგზაურობის ინფორმაცია არ არის ხელმისაწვდომი</p>
+</div>
