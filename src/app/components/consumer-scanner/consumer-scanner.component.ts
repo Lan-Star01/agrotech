@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
+import { QrScannerService, ScanResult } from '../../services/qr-scanner.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-consumer-scanner',
@@ -10,24 +12,75 @@ import { ProductService } from '../../services/product.service';
   templateUrl: './consumer-scanner.component.html',
   styleUrl: './consumer-scanner.component.css'
 })
-export class ConsumerScannerComponent {
+export class ConsumerScannerComponent implements OnInit, OnDestroy {
+  @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
+
   manualCode = '';
   errorMessage = '';
+  cameraError = '';
   isScanning = false;
+  showCamera = false;
+
+  private scanSubscription: Subscription | null = null;
 
   constructor(
     private router: Router,
-    private productService: ProductService
+    private productService: ProductService,
+    private qrScannerService: QrScannerService
   ) {}
 
-  scanQRCode(): void {
-    this.isScanning = true;
-    this.errorMessage = '';
+  ngOnInit(): void {
+    this.scanSubscription = this.qrScannerService.scanResult$.subscribe(result => {
+      if (result) {
+        this.handleScanResult(result);
+      }
+    });
+  }
 
-    setTimeout(() => {
-      this.errorMessage = 'კამერით სკანირება ამ დემო ვერსიაში მიუწვდომელია. გთხოვთ გამოიყენოთ პროდუქტის ID.';
+  ngOnDestroy(): void {
+    this.stopCamera();
+    if (this.scanSubscription) {
+      this.scanSubscription.unsubscribe();
+    }
+  }
+
+  async startCamera(): Promise<void> {
+    this.showCamera = true;
+    this.cameraError = '';
+    this.errorMessage = '';
+    this.isScanning = true;
+
+    setTimeout(async () => {
+      if (this.videoElement?.nativeElement) {
+        await this.qrScannerService.startScanning(this.videoElement.nativeElement);
+      }
+    }, 100);
+  }
+
+  stopCamera(): void {
+    this.showCamera = false;
+    this.isScanning = false;
+    this.qrScannerService.stopScanning();
+    this.qrScannerService.resetResult();
+  }
+
+  private handleScanResult(result: ScanResult): void {
+    if (result.success && result.data) {
+      this.stopCamera();
+
+      let productId = result.data;
+
+      // თუ URL არის, ამოვიღოთ ID
+      if (result.data.includes('/product/') || result.data.includes('/lookup/')) {
+        const parts = result.data.split('/');
+        productId = parts[parts.length - 1];
+      }
+
+      this.router.navigate(['/lookup', productId]);
+    } else if (result.error) {
+      this.cameraError = result.error;
       this.isScanning = false;
-    }, 1000);
+    }
   }
 
   searchByCode(): void {
@@ -37,7 +90,7 @@ export class ConsumerScannerComponent {
     }
 
     this.errorMessage = '';
-    this.router.navigate(['/product', this.manualCode.trim()]);
+    this.router.navigate(['/lookup', this.manualCode.trim()]);
   }
 
   navigateHome(): void {

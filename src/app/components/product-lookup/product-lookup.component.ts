@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
+import { QrScannerService, ScanResult } from '../../services/qr-scanner.service';
 import { Product } from '../../models/product.model';
 import { JourneyTimelineComponent } from '../journey-timeline/journey-timeline.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-lookup',
@@ -13,13 +15,19 @@ import { JourneyTimelineComponent } from '../journey-timeline/journey-timeline.c
   templateUrl: './product-lookup.component.html',
   styleUrl: './product-lookup.component.css'
 })
-export class ProductLookupComponent implements OnInit {
+export class ProductLookupComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
+
   productId: string = '';
   product: Product | null = null;
   loading: boolean = false;
   notFound: boolean = false;
   showCamera: boolean = false;
   errorMessage = '';
+  cameraError = '';
+  isScanning = false;
+
+  private scanSubscription: Subscription | null = null;
 
   // დემო პროდუქტები
   private demoProducts: Product[] = [
@@ -235,7 +243,8 @@ export class ProductLookupComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private productService: ProductService
+    private productService: ProductService,
+    private qrScannerService: QrScannerService
   ) {}
 
   ngOnInit(): void {
@@ -246,6 +255,66 @@ export class ProductLookupComponent implements OnInit {
         this.lookupProduct();
       }
     });
+
+    // Subscribe to scan results
+    this.scanSubscription = this.qrScannerService.scanResult$.subscribe(result => {
+      if (result) {
+        this.handleScanResult(result);
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    // ვიდეო ელემენტი მზად არის
+  }
+
+  ngOnDestroy(): void {
+    this.stopCamera();
+    if (this.scanSubscription) {
+      this.scanSubscription.unsubscribe();
+    }
+  }
+
+  async startCamera(): Promise<void> {
+    this.showCamera = true;
+    this.cameraError = '';
+    this.isScanning = true;
+
+    // დაველოდოთ DOM-ის განახლებას
+    setTimeout(async () => {
+      if (this.videoElement?.nativeElement) {
+        await this.qrScannerService.startScanning(this.videoElement.nativeElement);
+      }
+    }, 100);
+  }
+
+  stopCamera(): void {
+    this.showCamera = false;
+    this.isScanning = false;
+    this.qrScannerService.stopScanning();
+    this.qrScannerService.resetResult();
+  }
+
+  private handleScanResult(result: ScanResult): void {
+    if (result.success && result.data) {
+      // QR კოდი წარმატებით დასკანერდა
+      this.stopCamera();
+
+      // შევეცადოთ პროდუქტის ID-ს ამოღება
+      let productId = result.data;
+
+      // თუ URL არის, ამოვიღოთ ID
+      if (result.data.includes('/product/') || result.data.includes('/lookup/')) {
+        const parts = result.data.split('/');
+        productId = parts[parts.length - 1];
+      }
+
+      this.productId = productId;
+      this.lookupProduct();
+    } else if (result.error) {
+      this.cameraError = result.error;
+      this.isScanning = false;
+    }
   }
 
   lookupProduct(): void {

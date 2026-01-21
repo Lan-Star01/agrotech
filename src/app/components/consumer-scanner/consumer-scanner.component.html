@@ -26,19 +26,37 @@
           <div class="card-body p-5">
             <div class="text-center mb-4">
               <div class="scanner-placeholder">
-                <i class="bi bi-qr-code-scan display-1 text-success mb-3"></i>
-                @if (isScanning) {
-                  <div class="spinner-border text-success" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                @if (showCamera) {
+                  <div class="camera-container mb-3">
+                    <video #videoElement autoplay playsinline muted class="camera-preview"></video>
+                    <div class="camera-overlay">
+                      <div class="scan-frame"></div>
+                      @if (isScanning) {
+                        <p class="text-white mt-3">
+                          <i class="bi bi-search"></i> QR კოდის ძებნა...
+                        </p>
+                      }
+                    </div>
                   </div>
-                  <p class="text-muted mt-3">სკანირება...</p>
-                } @else {
-                  <button class="btn btn-success btn-lg mb-3 ms-3" (click)="scanQRCode()">
-                    <i class="bi bi-camera"></i> კამერით სკანირება
+                  @if (cameraError) {
+                    <div class="alert alert-danger mb-3">
+                      <i class="bi bi-exclamation-triangle"></i>
+                      {{ cameraError }}
+                    </div>
+                  }
+                  <button class="btn btn-outline-danger" (click)="stopCamera()">
+                    <i class="bi bi-x-circle"></i> კამერის დახურვა
                   </button>
-                  <p class="text-muted">
-                    დემო ვერსია: გამოიყენეთ პროდუქტის ID მანუალური ძიებისთვის
-                  </p>
+                } @else {
+                  <i class="bi bi-qr-code-scan display-1 text-success mb-3"></i>
+                  <div class="d-flex flex-column align-items-center gap-2">
+                    <button class="btn btn-success btn-lg" (click)="startCamera()">
+                      <i class="bi bi-camera"></i> კამერით სკანირება
+                    </button>
+                    <p class="text-muted small mt-2">
+                      გამოიყენეთ კამერა ან შეიყვანეთ პროდუქტის კოდი ხელით
+                    </p>
+                  </div>
                 }
               </div>
             </div>
@@ -55,7 +73,7 @@
                   type="text"
                   class="form-control"
                   [(ngModel)]="manualCode"
-                  placeholder="მაგ: lq9j8k..."
+                  placeholder="მაგ: DEMO001"
                   (keyup.enter)="searchByCode()">
                 <button
                   class="btn btn-success"
